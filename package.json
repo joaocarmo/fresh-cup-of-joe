@@ -2,11 +2,11 @@
   "name": "fresh-cup-of-joe",
   "version": "1.0.0",
   "description": "When you need that fresh cup of joe in the morning",
-  "main": "src/index.ts",
+  "main": "src/index.html",
   "private": true,
   "scripts": {
     "build": "parcel build src/index.html",
-    "clean": "rm -rf .parcel-cache",
+    "clean": "rm -rf .parcel-cache dist/*",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pretty:fix": "prettier --write .",
