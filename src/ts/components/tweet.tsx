@@ -1,4 +1,5 @@
 import Avatar from './avatar'
+import { sanitizeText } from '../utils/functions'
 
 export type TweetProp = {
   image: string
@@ -29,6 +30,7 @@ const styles = {
   },
   tweetAvatar: {},
   tweetContent: {
+    flex: 1,
     margin: '0.5em',
   },
   tweetTitle: {
@@ -54,7 +56,7 @@ const Tweet = ({
     </aside>
     <article style={styles.tweetContent}>
       <h4 style={styles.tweetTitle}>{username}</h4>
-      <p style={styles.tweetText}>{text}</p>
+      <p style={styles.tweetText}>{sanitizeText(text)}</p>
       <time style={styles.tweetTimeStamp}>
         {new Date(timeStamp).toLocaleString()}
       </time>

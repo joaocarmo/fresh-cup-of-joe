@@ -1,16 +1,18 @@
+import { AVATAR_SIZE } from '../utils/constants'
+
 type AvatarProps = {
   src: string
 }
 
 const style = {
+  backgroundColor: '#aaa',
   borderColor: '#aaa',
-  borderRadius: '50px',
+  borderRadius: AVATAR_SIZE,
   borderStyle: 'solid',
   borderWidth: '1px',
-  height: 'auto',
+  height: AVATAR_SIZE,
   margin: '1em 0.5em 0em 0.5em',
-  maxWidth: '50px',
-  width: '100%',
+  width: AVATAR_SIZE,
 }
 
 const Avatar = ({ src }: AvatarProps): JSX.Element => (

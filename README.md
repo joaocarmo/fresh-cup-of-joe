@@ -96,6 +96,20 @@ This resets the database back to 100 entries. You can use it for your testing pu
    1. Readability of your code
    1. Handling of edge cases, performance issues, including request efficiency and stability of the web app
 
+## Bypass CORS
+
+```sh
+npm install -g local-cors-proxy
+```
+
+```sh
+lcp --proxyUrl https://bumble-twitter-interview.herokuapp.com/joao-carmo
+```
+
+```js
+fetch('http://localhost:8010/proxy/api')
+```
+
 <!-- References -->
 
 [mockup]: ./src/img/twitter-interview-feed.png
