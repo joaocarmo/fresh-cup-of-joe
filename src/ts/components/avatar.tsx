@@ -16,7 +16,7 @@ const style = {
 }
 
 const Avatar = ({ src }: AvatarProps): JSX.Element => (
-  <img src={src} alt="User avatar" style={style} />
+  <img src={src} alt="" style={style} />
 )
 
 export default Avatar

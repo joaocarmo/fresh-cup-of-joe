@@ -15,18 +15,29 @@ const App = (): JSX.Element => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   const lastTweetId = useRef(0)
+  const lastRequestCompleted = useRef(true)
   const intervalId = useRef(null)
 
   const fetchAndUpdateTweets = useCallback(
     async (count = REFRESH_BATCH_COUNT) => {
-      const tweets = await fetchTweets({ afterId: lastTweetId.current, count })
+      if (lastRequestCompleted.current) {
+        // This should avoid concurrent requests, especially on slow connections
+        lastRequestCompleted.current = false
 
-      // Save the ID of the most recent tweet to use on the next request
-      lastTweetId.current = getLastTweetId(tweets) || lastTweetId.current
+        const tweets = await fetchTweets({
+          afterId: lastTweetId.current,
+          count,
+        })
 
-      debugLog(lastTweetId?.current)
+        // Save the ID of the most recent tweet to use on the next request
+        lastTweetId.current = getLastTweetId(tweets) || lastTweetId.current
 
-      dispatch({ type: ACTION_ADD_TWEETS, payload: tweets })
+        debugLog(lastTweetId?.current)
+
+        dispatch({ type: ACTION_ADD_TWEETS, payload: tweets })
+
+        lastRequestCompleted.current = true
+      }
     },
     [],
   )
