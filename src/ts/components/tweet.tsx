@@ -1,12 +1,11 @@
 import Avatar from './avatar'
-import { sanitizeText } from '../utils/functions'
 
 export type TweetProp = {
-  image: string
   id: number
+  image: string
   text: string
-  username: string
   timeStamp: number
+  username: string
 }
 
 type TweetProps = {
@@ -28,7 +27,6 @@ const styles = {
     marginTop: '0.4em',
     width: '100%',
   },
-  tweetAvatar: {},
   tweetContent: {
     flex: 1,
     margin: '0.5em',
@@ -47,16 +45,30 @@ const styles = {
   },
 }
 
+/**
+ * Renders a single tweet.
+ * @component
+ * @example
+ * <Tweet
+ *   tweet={{
+ *     image: 'https://i.pravatar.cc/300?u=100',
+ *     id: 100,
+ *     text: 'Hello there !',
+ *     username: 'Kenobi',
+ *     timeStamp: 1616014391585,
+ *   }}
+ * />
+ */
 const Tweet = ({
   tweet: { image, text, username, timeStamp },
 }: TweetProps): JSX.Element => (
   <div style={styles.tweetContainer}>
-    <aside style={styles.tweetAvatar}>
+    <aside>
       <Avatar src={image} />
     </aside>
     <article style={styles.tweetContent}>
       <h4 style={styles.tweetTitle}>{username}</h4>
-      <p style={styles.tweetText}>{sanitizeText(text)}</p>
+      <p style={styles.tweetText}>{text}</p>
       <time style={styles.tweetTimeStamp}>
         {new Date(timeStamp).toLocaleString()}
       </time>

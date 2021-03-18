@@ -20,6 +20,8 @@ const App = (): JSX.Element => {
 
   const fetchAndUpdateTweets = useCallback(
     async (count = REFRESH_BATCH_COUNT) => {
+      debugLog('lastRequestCompleted', lastRequestCompleted.current)
+
       if (lastRequestCompleted.current) {
         // This should avoid concurrent requests, especially on slow connections
         lastRequestCompleted.current = false

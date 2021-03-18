@@ -5,17 +5,35 @@ type FeedProps = {
   data: TweetProp[]
 }
 
-const style = {
-  alignItems: 'flex-start',
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'flex-start',
-  padding: '0.4em 0.8em',
-  width: '100%',
+const styles = {
+  feed: {
+    alignItems: 'flex-start',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+    padding: '0.4em 0.8em',
+    width: '100%',
+  },
 }
 
+/**
+ *
+ * @component
+ * @example
+ * <Feed
+ *   tweets={[
+ *     {
+ *       image: 'https://i.pravatar.cc/300?u=100',
+ *       id: 100,
+ *       text: 'Hello there !',
+ *       username: 'Kenobi',
+ *       timeStamp: 1616014391585,
+ *     },
+ *   ]}
+ * />
+ */
 const Feed = ({ data }: FeedProps): JSX.Element => (
-  <section style={style}>
+  <section style={styles.feed}>
     {data.map((tweet) => (
       <Tweet key={tweet.id} tweet={tweet} />
     ))}

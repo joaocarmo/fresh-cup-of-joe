@@ -1,6 +1,21 @@
 import type { TweetProp } from '../components/tweet'
 import { API_HOST, FETCH_MAX_RETRIES } from './constants'
 
+/**
+ * @typedef Tweet
+ * @type {object}
+ * @property {number} id - The tweet's ID
+ * @property {number} timestamp - The tweet's timestamp
+ * @property {string} image - The user's avatar URL
+ * @property {string} text - The tweet's text content
+ * @property {string} username - The user's username
+ */
+
+/**
+ * Logs information only in a development environment.
+ * @param args {*} Same arguments as console.log
+ * @returns {void}
+ */
 export const debugLog = (...args: unknown): void => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
@@ -8,10 +23,13 @@ export const debugLog = (...args: unknown): void => {
   }
 }
 
-export const sanitizeText = (text: string): string => {
-  return text
-}
-
+/**
+ * Retrieves the tweets from the backend endpoint. Retries if unsuccessful to a
+ * predefined number of times.
+ * @async
+ * @param {{afterId: number, count: number, retry: number}} options
+ * @returns {Array<Tweet>}
+ */
 export const fetchTweets = async ({
   afterId,
   count,
@@ -51,8 +69,12 @@ export const fetchTweets = async ({
   return fetchTweets({ afterId, count, retry: retry + 1 })
 }
 
+/**
+ * Returns the ID of a list's topmost tweet.
+ * @param {Array<Tweet>} tweets
+ * @returns {number}
+ */
 export const getLastTweetId = (tweets: TweetProp[]): number => {
-  // The tweets are ordered from most to least recent
   if (tweets.length > 0) {
     const [lastTweet] = tweets
     return lastTweet?.id
@@ -61,13 +83,20 @@ export const getLastTweetId = (tweets: TweetProp[]): number => {
   return 0
 }
 
+/**
+ * Merges the tweets currently in the app's memory with the new tweets returned
+ * from the backend. Uses a Map object to filter out duplicate IDs and respect
+ * the initial order.
+ * @param {Array<Tweet>} currentTweets
+ * @param {Array<Tweet>} newTweets
+ * @returns {Array<Tweet>}
+ */
 export const addNewTweets = (
   currentTweets: TweetProp[],
   newTweets: TweetProp[],
 ): TweetProp[] => {
   const allTweets = [...newTweets, ...currentTweets]
 
-  // Use a Map to filter out duplicate IDs and respect the order
   const uniqueTweets = [
     ...new Map(allTweets.map((tweet) => [tweet.id, tweet])).values(),
   ]
