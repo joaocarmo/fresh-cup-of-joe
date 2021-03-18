@@ -9,7 +9,7 @@ const styles = {
   feed: {
     alignItems: 'flex-start',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     justifyContent: 'flex-start',
     padding: '0.4em 0.8em',
     width: '100%',

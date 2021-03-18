@@ -20,9 +20,12 @@ export const initialState = {
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case ACTION_ADD_TWEETS:
-      return { ...state, tweets: addNewTweets(state.tweets, action.payload) }
+      return {
+        ...state,
+        tweets: addNewTweets(state.tweets, action.payload as TweetProp[]),
+      }
     case ACTION_SET_IS_LOADING:
-      return { ...state, isLoading: action.payload }
+      return { ...state, isLoading: action.payload as boolean }
     default:
       return state
   }

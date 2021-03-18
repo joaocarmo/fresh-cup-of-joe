@@ -23,7 +23,7 @@ const App = (): JSX.Element => {
   debugLog('loading', state.isLoading)
 
   const fetchAndUpdateTweets = useCallback(
-    async (count = REFRESH_BATCH_COUNT) => {
+    async (count: number = REFRESH_BATCH_COUNT) => {
       debugLog('lastRequestCompleted', lastRequestCompleted.current)
 
       if (lastRequestCompleted.current) {
@@ -52,13 +52,13 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     // Get the initial batch of tweets
-    fetchAndUpdateTweets(INITIAL_BATCH_COUNT)
+    void fetchAndUpdateTweets(INITIAL_BATCH_COUNT)
 
     // The setInterval argument needs a constant ref
     const tick = () => {
       dispatch({ type: ACTION_SET_IS_LOADING, payload: true })
 
-      fetchAndUpdateTweets()
+      void fetchAndUpdateTweets()
     }
 
     // Setup an interval to fetch new tweets

@@ -16,7 +16,7 @@ import { API_HOST, FETCH_MAX_RETRIES } from './constants'
  * @param args {*} Same arguments as console.log
  * @returns {void}
  */
-export const debugLog = (...args: unknown): void => {
+export const debugLog = (...args: unknown[]): void => {
   if (process.env.NODE_ENV === 'development') {
     // eslint-disable-next-line no-console
     console.log(...args)
@@ -37,7 +37,7 @@ export const fetchTweets = async ({
 }: {
   afterId: number
   count: number
-  retry: number
+  retry?: number
 }): Promise<TweetProp[]> => {
   if (retry >= FETCH_MAX_RETRIES) {
     return []
@@ -46,18 +46,18 @@ export const fetchTweets = async ({
   const apiTweets = new URL(`${API_HOST}/api`)
 
   if (afterId) {
-    apiTweets.searchParams.append('afterId', afterId)
+    apiTweets.searchParams.append('afterId', `${afterId}`)
   }
 
   if (count) {
-    apiTweets.searchParams.append('count', count)
+    apiTweets.searchParams.append('count', `${count}`)
   }
 
   try {
-    const response = await fetch(apiTweets)
+    const response = await fetch(apiTweets.href)
 
     if (response.ok) {
-      const data = await response.json()
+      const data = (await response.json()) as TweetProp[]
 
       return data
     }
@@ -97,9 +97,9 @@ export const addNewTweets = (
 ): TweetProp[] => {
   const allTweets = [...newTweets, ...currentTweets]
 
-  const uniqueTweets = [
-    ...new Map(allTweets.map((tweet) => [tweet.id, tweet])).values(),
-  ]
+  const tweetMap: Map<number, TweetProp> = new Map(
+    allTweets.map((tweet) => [tweet.id, tweet]),
+  )
 
-  return uniqueTweets
+  return Array.from(tweetMap.values())
 }

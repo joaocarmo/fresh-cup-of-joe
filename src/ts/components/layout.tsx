@@ -6,7 +6,7 @@ const styles = {
   layout: {
     alignItems: 'center',
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'column' as const,
     justifyContent: 'flex-start',
     margin: '0 auto',
     maxWidth: '1280px',
