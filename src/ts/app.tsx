@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useReducer, useRef } from 'react'
 import Feed from './components/feed'
 import Layout from './components/layout'
+import Loader from './components/loader'
 import { initialState, reducer } from './utils/store'
 import { debugLog, fetchTweets, getLastTweetId } from './utils/functions'
 import {
   ACTION_ADD_TWEETS,
+  ACTION_SET_IS_LOADING,
   INITIAL_BATCH_COUNT,
   REFRESH_BATCH_COUNT,
   REFRESH_RATE,
@@ -17,6 +19,8 @@ const App = (): JSX.Element => {
   const lastTweetId = useRef(0)
   const lastRequestCompleted = useRef(true)
   const intervalId = useRef(null)
+
+  debugLog('loading', state.isLoading)
 
   const fetchAndUpdateTweets = useCallback(
     async (count = REFRESH_BATCH_COUNT) => {
@@ -38,6 +42,8 @@ const App = (): JSX.Element => {
 
         dispatch({ type: ACTION_ADD_TWEETS, payload: tweets })
 
+        dispatch({ type: ACTION_SET_IS_LOADING, payload: false })
+
         lastRequestCompleted.current = true
       }
     },
@@ -49,7 +55,11 @@ const App = (): JSX.Element => {
     fetchAndUpdateTweets(INITIAL_BATCH_COUNT)
 
     // The setInterval argument needs a constant ref
-    const tick = () => fetchAndUpdateTweets()
+    const tick = () => {
+      dispatch({ type: ACTION_SET_IS_LOADING, payload: true })
+
+      fetchAndUpdateTweets()
+    }
 
     // Setup an interval to fetch new tweets
     intervalId.current = setInterval(tick, REFRESH_RATE)
@@ -66,6 +76,7 @@ const App = (): JSX.Element => {
 
   return (
     <Layout>
+      {state.isLoading && <Loader />}
       <Feed data={state.tweets} />
     </Layout>
   )
