@@ -1,6 +1,10 @@
 import type { TweetProp } from '../components/tweet'
 import { addNewTweets } from './functions'
-import { ACTION_ADD_TWEETS, ACTION_SET_IS_LOADING } from './constants'
+import {
+  ACTION_ADD_TWEETS,
+  ACTION_SET_AUTO_REFRESH,
+  ACTION_SET_IS_LOADING,
+} from './constants'
 
 type Action = {
   type: string
@@ -8,13 +12,15 @@ type Action = {
 }
 
 type State = {
-  tweets: TweetProp[]
+  autoRefreshEnabled: boolean
   isLoading: boolean
+  tweets: TweetProp[]
 }
 
 export const initialState = {
-  tweets: [],
+  autoRefreshEnabled: true,
   isLoading: true,
+  tweets: [],
 }
 
 export const reducer = (state: State, action: Action): State => {
@@ -24,6 +30,8 @@ export const reducer = (state: State, action: Action): State => {
         ...state,
         tweets: addNewTweets(state.tweets, action.payload as TweetProp[]),
       }
+    case ACTION_SET_AUTO_REFRESH:
+      return { ...state, autoRefreshEnabled: action.payload as boolean }
     case ACTION_SET_IS_LOADING:
       return { ...state, isLoading: action.payload as boolean }
     default:

@@ -2,11 +2,14 @@ import { useCallback, useEffect, useReducer, useRef } from 'react'
 import Feed from './components/feed'
 import Layout from './components/layout'
 import Loader from './components/loader'
+import Toggle from './components/toggle'
 import { initialState, reducer } from './utils/store'
 import { debugLog, fetchTweets, getLastTweetId } from './utils/functions'
 import {
   ACTION_ADD_TWEETS,
+  ACTION_SET_AUTO_REFRESH,
   ACTION_SET_IS_LOADING,
+  AUTO_REFRESH_ENABLED,
   INITIAL_BATCH_COUNT,
   REFRESH_BATCH_COUNT,
   REFRESH_RATE,
@@ -50,10 +53,7 @@ const App = (): JSX.Element => {
     [],
   )
 
-  useEffect(() => {
-    // Get the initial batch of tweets
-    void fetchAndUpdateTweets(INITIAL_BATCH_COUNT)
-
+  const setupTimer = useCallback(() => {
     // The setInterval argument needs a constant ref
     const tick = () => {
       dispatch({ type: ACTION_SET_IS_LOADING, payload: true })
@@ -63,13 +63,37 @@ const App = (): JSX.Element => {
 
     // Setup an interval to fetch new tweets
     intervalId.current = setInterval(tick, REFRESH_RATE)
+  }, [fetchAndUpdateTweets])
+
+  const clearTimer = useCallback(() => {
+    if (intervalId?.current) {
+      clearInterval(intervalId.current)
+      intervalId.current = null
+    }
+  }, [])
+
+  const handleAutoRefreshToggle = useCallback(() => {
+    dispatch({
+      type: ACTION_SET_AUTO_REFRESH,
+      payload: !state.autoRefreshEnabled,
+    })
+
+    if (state.autoRefreshEnabled) {
+      clearTimer()
+    } else {
+      setupTimer()
+    }
+  }, [clearTimer, setupTimer, state.autoRefreshEnabled])
+
+  useEffect(() => {
+    // Get the initial batch of tweets
+    void fetchAndUpdateTweets(INITIAL_BATCH_COUNT)
+
+    setupTimer()
 
     return () => {
       // Cleanup the interval on unmount
-      if (intervalId?.current) {
-        clearInterval(intervalId.current)
-        intervalId.current = null
-      }
+      clearTimer()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -77,6 +101,11 @@ const App = (): JSX.Element => {
   return (
     <Layout>
       {state.isLoading && <Loader />}
+      <Toggle
+        checked={state.autoRefreshEnabled}
+        onChange={handleAutoRefreshToggle}>
+        {AUTO_REFRESH_ENABLED}
+      </Toggle>
       <Feed data={state.tweets} />
     </Layout>
   )

@@ -2,6 +2,10 @@ export const ACTION_ADD_TWEETS = 'ACTION_ADD_TWEETS'
 
 export const ACTION_SET_IS_LOADING = 'ACTION_SET_IS_LOADING'
 
+export const ACTION_SET_AUTO_REFRESH = 'ACTION_SET_AUTO_REFRESH'
+
+export const AUTO_REFRESH_ENABLED = 'Auto refresh the feed'
+
 /*
 export const API_HOST =
   'https://bumble-twitter-interview.herokuapp.com/joao-carmo'
