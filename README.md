@@ -20,6 +20,12 @@ I want to run an auto-updating twitter-like feed. Here is a rough mockup of the 
 1. There should be no skipped or missed tweets on the page
 1. In case of any failure conditions, the tweet updates can pause or stop but should resume as soon as possible and no error messages should be shown to the user
 
+## Extra Credit
+
+1. The app should stop refreshing as soon as the user scrolls down
+1. The app should resume refreshing as soon as the user is back at the top
+1. The app should fetch older tweets when the user reaches the bottom
+
 ## API Specification
 
 We have a virtual Twitter server hosted on
@@ -103,7 +109,7 @@ npm install -g local-cors-proxy
 ```
 
 ```sh
-lcp --proxyUrl https://bumble-twitter-interview.herokuapp.com/joao-carmo
+yarn proxy
 ```
 
 ```js

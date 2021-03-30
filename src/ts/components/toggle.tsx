@@ -1,6 +1,6 @@
 type ToggleProps = {
   checked?: boolean
-  children?: React.Node
+  children?: React.ReactNode
   id?: string
   label?: string
   name?: string
@@ -18,12 +18,11 @@ const Toggle = ({
   <div>
     <label htmlFor={id}>
       <input
-        checked={checked ? 'checked' : ''}
+        checked={checked}
         id={id}
         name={name}
         onChange={onChange}
         type="checkbox"
-        value={checked}
       />
       {label || children}
     </label>

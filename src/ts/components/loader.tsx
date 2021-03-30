@@ -8,7 +8,7 @@ const styles = {
     margin: '0 auto',
     opacity: 0.7,
     padding: '1em',
-    position: 'absolute' as const,
+    position: 'fixed' as const,
     top: '2em',
   },
 }

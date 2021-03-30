@@ -27,15 +27,17 @@ export const debugLog = (...args: unknown[]): void => {
  * Retrieves the tweets from the backend endpoint. Retries if unsuccessful to a
  * predefined number of times.
  * @async
- * @param {{afterId: number, count: number, retry: number}} options
+ * @param {{afterId: number, beforeId: number, count: number, retry: number}} options
  * @returns {Array<Tweet>}
  */
 export const fetchTweets = async ({
   afterId,
+  beforeId,
   count,
   retry = 0,
 }: {
-  afterId: number
+  afterId?: number
+  beforeId?: number
   count: number
   retry?: number
 }): Promise<TweetProp[]> => {
@@ -47,6 +49,8 @@ export const fetchTweets = async ({
 
   if (afterId) {
     apiTweets.searchParams.append('afterId', `${afterId}`)
+  } else if (beforeId) {
+    apiTweets.searchParams.append('beforeId', `${beforeId}`)
   }
 
   if (count) {
@@ -66,7 +70,7 @@ export const fetchTweets = async ({
   }
 
   // If no data has been returned, the request failed and we should retry
-  return fetchTweets({ afterId, count, retry: retry + 1 })
+  return fetchTweets({ afterId, beforeId, count, retry: retry + 1 })
 }
 
 /**
@@ -96,6 +100,27 @@ export const addNewTweets = (
   newTweets: TweetProp[],
 ): TweetProp[] => {
   const allTweets = [...newTweets, ...currentTweets]
+
+  const tweetMap: Map<number, TweetProp> = new Map(
+    allTweets.map((tweet) => [tweet.id, tweet]),
+  )
+
+  return Array.from(tweetMap.values())
+}
+
+/**
+ * Merges the tweets currently in the app's memory with the past tweets returned
+ * from the backend. Uses a Map object to filter out duplicate IDs and respect
+ * the initial order.
+ * @param {Array<Tweet>} currentTweets
+ * @param {Array<Tweet>} newTweets
+ * @returns {Array<Tweet>}
+ */
+export const addPastTweets = (
+  currentTweets: TweetProp[],
+  pastTweets: TweetProp[],
+): TweetProp[] => {
+  const allTweets = [...currentTweets, ...pastTweets]
 
   const tweetMap: Map<number, TweetProp> = new Map(
     allTweets.map((tweet) => [tweet.id, tweet]),

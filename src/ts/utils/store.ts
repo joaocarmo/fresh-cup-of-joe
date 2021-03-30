@@ -1,7 +1,8 @@
 import type { TweetProp } from '../components/tweet'
-import { addNewTweets } from './functions'
+import { addNewTweets, addPastTweets } from './functions'
 import {
   ACTION_ADD_TWEETS,
+  ACTION_ADD_PAST_TWEETS,
   ACTION_SET_AUTO_REFRESH,
   ACTION_SET_IS_LOADING,
 } from './constants'
@@ -29,6 +30,11 @@ export const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         tweets: addNewTweets(state.tweets, action.payload as TweetProp[]),
+      }
+    case ACTION_ADD_PAST_TWEETS:
+      return {
+        ...state,
+        tweets: addPastTweets(state.tweets, action.payload as TweetProp[]),
       }
     case ACTION_SET_AUTO_REFRESH:
       return { ...state, autoRefreshEnabled: action.payload as boolean }

@@ -7,6 +7,7 @@ import { initialState, reducer } from './utils/store'
 import { debugLog, fetchTweets, getLastTweetId } from './utils/functions'
 import {
   ACTION_ADD_TWEETS,
+  ACTION_ADD_PAST_TWEETS,
   ACTION_SET_AUTO_REFRESH,
   ACTION_SET_IS_LOADING,
   AUTO_REFRESH_ENABLED,
@@ -22,6 +23,7 @@ const App = (): JSX.Element => {
   const lastTweetId = useRef(0)
   const lastRequestCompleted = useRef(true)
   const intervalId = useRef(null)
+  const lastScrollTop = useRef(0)
 
   debugLog('loading', state.isLoading)
 
@@ -51,6 +53,24 @@ const App = (): JSX.Element => {
       }
     },
     [],
+  )
+
+  const fetchAndUpdatePastTweets = useCallback(
+    async (count: number = REFRESH_BATCH_COUNT) => {
+      const bottomTweetId = state.tweets[state.tweets.length - 1]?.id
+
+      if (bottomTweetId) {
+        const pastTweets = await fetchTweets({
+          beforeId: bottomTweetId,
+          count,
+        })
+
+        dispatch({ type: ACTION_ADD_PAST_TWEETS, payload: pastTweets })
+
+        dispatch({ type: ACTION_SET_IS_LOADING, payload: false })
+      }
+    },
+    [state.tweets],
   )
 
   const setupTimer = useCallback(() => {
@@ -97,6 +117,39 @@ const App = (): JSX.Element => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    const handleOnScroll = () => {
+      const currentY = window.scrollY
+      const currentHeight = window.innerHeight
+      const currentBodyHeight = document.body.offsetHeight
+      const currentScrollTop =
+        window.pageYOffset || document.documentElement.scrollTop
+
+      if (currentY > 0) {
+        clearTimer()
+      } else {
+        setupTimer()
+      }
+
+      if (
+        currentY + currentHeight > currentBodyHeight &&
+        currentScrollTop > lastScrollTop.current
+      ) {
+        dispatch({ type: ACTION_SET_IS_LOADING, payload: true })
+
+        void fetchAndUpdatePastTweets()
+      }
+
+      lastScrollTop.current = currentScrollTop > 0 ? currentScrollTop : 0
+    }
+
+    window.addEventListener('scroll', handleOnScroll)
+
+    return () => {
+      window.removeEventListener('scroll', handleOnScroll)
+    }
+  }, [clearTimer, fetchAndUpdatePastTweets, setupTimer])
 
   return (
     <Layout>
