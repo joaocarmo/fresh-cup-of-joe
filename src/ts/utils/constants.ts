@@ -8,12 +8,7 @@ export const ACTION_SET_AUTO_REFRESH = 'ACTION_SET_AUTO_REFRESH'
 
 export const AUTO_REFRESH_ENABLED = 'Auto refresh the feed'
 
-/*
-export const API_HOST =
-  'https://bumble-twitter-interview.herokuapp.com/joao-carmo'
-*/
-
-export const API_HOST = 'http://localhost:8010/proxy'
+export const API_HOST = 'http://localhost:3001/api'
 
 export const AVATAR_SIZE = '50px'
 

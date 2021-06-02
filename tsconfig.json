@@ -7,5 +7,6 @@
       "~*": ["./*"]
     }
   },
+  "exclude": ["src/api/**/*"],
   "include": ["src/**/*", ".eslintrc.js"]
 }

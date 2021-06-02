@@ -45,8 +45,9 @@ export const fetchTweets = async ({
     return []
   }
 
-  const apiTweets = new URL(`${API_HOST}/api`)
+  const apiTweets = new URL(`${API_HOST}/tweets`)
 
+  /*
   if (afterId) {
     apiTweets.searchParams.append('afterId', `${afterId}`)
   } else if (beforeId) {
@@ -56,6 +57,7 @@ export const fetchTweets = async ({
   if (count) {
     apiTweets.searchParams.append('count', `${count}`)
   }
+  */
 
   try {
     const response = await fetch(apiTweets.href)

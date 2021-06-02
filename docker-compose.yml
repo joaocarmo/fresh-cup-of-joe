@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./src/api:/opt/fcoj/src/api
+      - node_modules:/opt/fcoj/node_modules
+      - yarn_cache:/usr/local/share/.cache/yarn/v6
+    environment:
+      MONGO_SERVER: db
+      MONGO_PORT: 27017
+      MONGO_DB: fcoj
+      MONGO_USER: mongo_user
+      MONGO_PASS: mongo_pass
+    command: [ "yarn", "api:start:dev" ]
+  db:
+    image: mongo:3.6
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - db_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo_user
+      MONGO_INITDB_ROOT_PASSWORD: mongo_pass
+volumes:
+  db_data:
+  node_modules:
+  yarn_cache:
