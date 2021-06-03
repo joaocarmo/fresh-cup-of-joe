@@ -31,7 +31,7 @@ export const debugLog = (...args: unknown[]): void => {
  * @returns {Array<Tweet>}
  */
 export const fetchTweets = async ({
-  afterId,
+  afterId = 100,
   beforeId,
   count,
   retry = 0,
@@ -50,7 +50,11 @@ export const fetchTweets = async ({
   if (afterId) {
     apiTweets.searchParams.append('$skip', `${afterId}`)
   } else if (beforeId) {
-    apiTweets.searchParams.append('$skip', `${beforeId - count}`)
+    const skip = beforeId - count
+
+    if (skip > 0) {
+      apiTweets.searchParams.append('$skip', `${skip}`)
+    }
   }
 
   if (count) {
