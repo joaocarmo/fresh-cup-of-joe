@@ -11,6 +11,10 @@ ENV PATH /opt/fcoj/node_modules/.bin:$PATH
 
 COPY . .
 
+RUN yarn build
+
+COPY ./dist ./api/static
+
 FROM builder AS worker
 
 # Set the server port

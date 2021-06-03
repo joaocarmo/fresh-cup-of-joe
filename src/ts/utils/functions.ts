@@ -47,25 +47,23 @@ export const fetchTweets = async ({
 
   const apiTweets = new URL(`${API_HOST}/tweets`)
 
-  /*
   if (afterId) {
-    apiTweets.searchParams.append('afterId', `${afterId}`)
+    apiTweets.searchParams.append('$skip', `${afterId}`)
   } else if (beforeId) {
-    apiTweets.searchParams.append('beforeId', `${beforeId}`)
+    apiTweets.searchParams.append('$skip', `${beforeId - count}`)
   }
 
   if (count) {
-    apiTweets.searchParams.append('count', `${count}`)
+    apiTweets.searchParams.append('$limit', `${count}`)
   }
-  */
 
   try {
     const response = await fetch(apiTweets.href)
 
     if (response.ok) {
-      const data = (await response.json()) as TweetProp[]
+      const { data } = (await response.json()) as TweetProp[]
 
-      return data
+      return data as TweetProp[]
     }
   } catch (err) {
     debugLog(err)

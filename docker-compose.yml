@@ -1,15 +1,16 @@
 version: "3.9"
 services:
-  backend:
+  app:
     build:
       context: .
     depends_on:
       - db
     restart: always
     ports:
+      - "1234:1234"
       - "3001:3001"
     volumes:
-      - ./src/api:/opt/fcoj/src/api
+      - ./src:/opt/fcoj/src
       - node_modules:/opt/fcoj/node_modules
       - yarn_cache:/usr/local/share/.cache/yarn/v6
     environment:
@@ -18,7 +19,7 @@ services:
       MONGO_DB: fcoj
       MONGO_USER: mongo_user
       MONGO_PASS: mongo_pass
-    command: [ "yarn", "api:start:dev" ]
+    command: [ "yarn", "dev" ]
   db:
     image: mongo:3.6
     restart: always

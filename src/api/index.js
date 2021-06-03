@@ -1,3 +1,4 @@
+const path = require('path')
 const feathers = require('@feathersjs/feathers')
 const express = require('@feathersjs/express')
 const socketio = require('@feathersjs/socketio')
@@ -29,6 +30,9 @@ mongoose.connect(MONGO_CONNECTION, {
 
 const API_PREFIX = '/api'
 const API_TWEETS = `${API_PREFIX}/tweets`
+const API_RESET = `${API_PREFIX}/reset`
+const STATIC_DIR = '../../dist'
+const NUM_TWEETS = 10000
 
 // Creates an ExpressJS compatible Feathers application
 const app = express(feathers())
@@ -38,19 +42,45 @@ app.use(express.json())
 // Parse URL-encoded params
 app.use(express.urlencoded({ extended: true }))
 // Host static files from the current folder
-app.use(express.static(__dirname))
+app.use(express.static(path.join(__dirname, STATIC_DIR)))
 // Add REST API support
 app.configure(express.rest())
 // Configure Socket.io real-time APIs
 app.configure(socketio())
 // Enable CORS
 app.use(cors())
+
+const createTweets = (num = NUM_TWEETS) => {
+  const initialTweets = [...Array(num)].map(
+    () => app.service(API_TWEETS).create(FakeTweet.generate())
+  )
+  return Promise.all(initialTweets)
+    .then((tweets) => {
+      console.log('Tweets created:', tweets.length);
+    })
+    .catch((err) => {
+      console.error('ERROR:', err.message)
+    })
+}
+
 // Connect to the db, create and register a Feathers service.
 app.use(API_TWEETS, service({
   Model: TweetModel,
   // Set to 'false' if you want Mongoose documents returned
   lean: true,
+  paginate: {
+    default: 20,
+    max: 50,
+  },
+  multi: true,
 }))
+
+app.get(API_RESET, (req, res) => {
+  app.service(API_TWEETS).remove(null, {}).then(() => {
+    createTweets().then(() => res.send('Reset successful'))
+  })
+})
+
 // Register a nicer error handler than the default Express one
 app.use(express.errorHandler())
 
@@ -65,14 +95,7 @@ app.publish(data => app.channel('everybody'))
 // So our API doesn't look so empty
 app.service(API_TWEETS).find({}).then((docs) => {
   if (docs && docs.length < 1) {
-    app.service(API_TWEETS)
-      .create(FakeTweet.generate())
-      .then((tweet) => {
-        console.log('Created tweet:', tweet);
-      })
-      .catch((err) => {
-        console.error('ERROR:', err.message)
-      })
+    return createTweets()
   }
 }).catch((err) => {
   console.error('ERROR:', err.message)

@@ -1,10 +1,16 @@
+const faker = require('faker')
+
 class FakeTweet {
+  static lastId = 0
+
   static generate() {
+    this.lastId += 1
+
     return {
-      id: 1,
-      image: 'https://picsum.photos/200',
-      text: 'Hello there !',
-      username: 'Obi-Wan Kenobi',
+      id: this.lastId,
+      image: faker.internet.avatar(),
+      text: faker.lorem.sentences(),
+      username: faker.internet.userName(),
     }
   }
 }
