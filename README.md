@@ -83,4 +83,4 @@ if you're updating the frontend.
 
 <!-- References -->
 
-[mockup]: ./src/img/twitter-interview-feed.png
+[mockup]: ./frontend/src/img/twitter-interview-feed.png
