@@ -65,9 +65,9 @@ export const fetchTweets = async ({
     const response = await fetch(apiTweets.href)
 
     if (response.ok) {
-      const { data } = (await response.json()) as TweetProp[]
+      const { data } = (await response.json()) as { data: TweetProp[] }
 
-      return data as TweetProp[]
+      return data
     }
   } catch (err) {
     debugLog(err)

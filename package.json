@@ -5,19 +5,11 @@
   "main": "src/index.html",
   "private": true,
   "scripts": {
-    "api:start:dev": "NODE_ENV=development nodemon src/api/index.js",
-    "api:start": "NODE_ENV=production node src/api/index.js",
-    "build": "parcel build src/index.html",
-    "clean": "rm -rf .parcel-cache dist/*",
-    "dev": "(trap 'kill 0' SIGINT; yarn start & yarn api:start:dev)",
     "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "pretty:fix": "prettier --write .",
     "pretty": "prettier --check .",
-    "proxy": "lcp --proxyUrl https://bumble-twitter-interview.herokuapp.com/joao-carmo",
-    "start": "parcel src/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "type-check": "tsc --noEmit"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -29,23 +21,8 @@
     "url": "https://github.com/joaocarmo/fresh-cup-of-joe/issues"
   },
   "homepage": "https://github.com/joaocarmo/fresh-cup-of-joe#readme",
-  "dependencies": {
-    "@feathersjs/errors": "^4.5.11",
-    "@feathersjs/express": "^4.5.11",
-    "@feathersjs/feathers": "^4.5.11",
-    "@feathersjs/socketio": "^4.5.11",
-    "cors": "^2.8.5",
-    "faker": "^5.5.3",
-    "feathers-mongoose": "^8.3.3",
-    "mongoose": "^5.12.12",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@babel/core": "^7.14.3",
-    "@babel/preset-react": "^7.13.13",
-    "@babel/preset-typescript": "^7.13.0",
-    "@types/react": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.26.0",
     "@typescript-eslint/parser": "^4.26.0",
     "eslint": "^7.27.0",
@@ -56,8 +33,6 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
-    "nodemon": "^2.0.7",
-    "parcel": "^2.0.0-beta.2",
     "prettier": "^2.3.0",
     "typescript": "^4.3.2"
   }

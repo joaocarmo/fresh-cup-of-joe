@@ -1,0 +1,36 @@
+{
+  "name": "fresh-cup-of-joe-frontend",
+  "version": "1.0.0",
+  "description": "When you need that fresh cup of joe in the morning",
+  "main": "src/index.html",
+  "private": true,
+  "scripts": {
+    "build": "parcel build src/index.html",
+    "clean": "rm -rf .parcel-cache dist/*",
+    "start": "parcel src/index.html",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "type-check": "tsc --noEmit"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaocarmo/fresh-cup-of-joe.git"
+  },
+  "author": "João Carmo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaocarmo/fresh-cup-of-joe/issues"
+  },
+  "homepage": "https://github.com/joaocarmo/fresh-cup-of-joe#readme",
+  "dependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-react": "^7.13.13",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/react": "^17.0.9",
+    "parcel": "^2.0.0-beta.2",
+    "typescript": "^4.3.2"
+  }
+}

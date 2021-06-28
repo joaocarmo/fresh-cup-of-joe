@@ -20,8 +20,8 @@ expected UI.
 1. There should be no duplicate tweets on the page
 1. There should be no skipped or missed tweets on the page
 1. In case of any failure conditions, the tweet updates can pause or stop but
-  should resume as soon as possible and no error messages should be shown to the
-  user
+   should resume as soon as possible and no error messages should be shown to the
+   user
 
 ## Extra Credit
 
@@ -36,8 +36,8 @@ expected UI.
 1. The API returns a JSON response and supports CORS
 1. The JSON response contains the username, id, timestamp, image and text
 1. The API is designed to fail randomly with HTTP 50X errors
-  (e.g. 500, 503 etc.) and you must handle this in your code. If it fails just
-  try to fetch the updates again.
+   (e.g. 500, 503 etc.) and you must handle this in your code. If it fails just
+   try to fetch the updates again.
 
 ### API Endpoints
 
@@ -56,14 +56,14 @@ Regenerates all fake tweets.
 ## Technical Requirements
 
 1. You don’t need to focus on the UI too much, a barebones version will do just
-  fine
+   fine
 1. You can choose any technology stack you are comfortable with
 1. Please don’t make any additional efforts on writing tests etc
 1. We will be reviewing your code on the following criteria:
    1. Architecture decisions made
    1. Readability of your code
    1. Handling of edge cases, performance issues, including request efficiency
-    and stability of the web app
+      and stability of the web app
 
 ## Running the app
 

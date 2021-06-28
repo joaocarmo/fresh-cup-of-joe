@@ -48,7 +48,7 @@ module.exports = {
       },
     },
     react: {
-      version: 'detect',
+      version: '17',
     },
   },
 }

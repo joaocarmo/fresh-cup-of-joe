@@ -19,9 +19,10 @@ const MONGO_PORT = process.env.MONGO_PORT || 27017
 const MONGO_DB = process.env.MONGO_DB || 'fcoj'
 const MONGO_USER = process.env.MONGO_USER
 const MONGO_PASS = process.env.MONGO_PASS
-const MONGO_CONNECTION = MONGO_USER && MONGO_PASS
-  ? `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`
-  : `mongodb://${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DB}`
+const MONGO_CONNECTION =
+  MONGO_USER && MONGO_PASS
+    ? `mongodb://${MONGO_USER}:${MONGO_PASS}@${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`
+    : `mongodb://${MONGO_SERVER}:${MONGO_PORT}/${MONGO_DB}`
 
 mongoose.connect(MONGO_CONNECTION, {
   useNewUrlParser: true,
@@ -51,12 +52,12 @@ app.configure(socketio())
 app.use(cors())
 
 const createTweets = (num = NUM_TWEETS) => {
-  const initialTweets = [...Array(num)].map(
-    () => app.service(API_TWEETS).create(FakeTweet.generate())
+  const initialTweets = [...Array(num)].map(() =>
+    app.service(API_TWEETS).create(FakeTweet.generate()),
   )
   return Promise.all(initialTweets)
     .then((tweets) => {
-      console.log('Tweets created:', tweets.length);
+      console.log('Tweets created:', tweets.length)
     })
     .catch((err) => {
       console.error('ERROR:', err.message)
@@ -64,44 +65,54 @@ const createTweets = (num = NUM_TWEETS) => {
 }
 
 // Connect to the db, create and register a Feathers service.
-app.use(API_TWEETS, service({
-  Model: TweetModel,
-  // Set to 'false' if you want Mongoose documents returned
-  lean: true,
-  paginate: {
-    default: 20,
-    max: 50,
-  },
-  multi: true,
-}))
+app.use(
+  API_TWEETS,
+  service({
+    Model: TweetModel,
+    // Set to 'false' if you want Mongoose documents returned
+    lean: true,
+    paginate: {
+      default: 20,
+      max: 50,
+    },
+    multi: true,
+  }),
+)
 
 app.get(API_RESET, (req, res) => {
-  app.service(API_TWEETS).remove(null, {}).then(() => {
-    createTweets().then(() => res.send('Reset successful'))
-  })
+  app
+    .service(API_TWEETS)
+    .remove(null, {})
+    .then(() => {
+      createTweets().then(() => res.send('Reset successful'))
+    })
 })
 
 // Register a nicer error handler than the default Express one
 app.use(express.errorHandler())
 
 // Add any new real-time connection to the `everybody` channel
-app.on('connection', connection =>
-  app.channel('everybody').join(connection)
-)
+app.on('connection', (connection) => app.channel('everybody').join(connection))
 // Publish all events to the `everybody` channel
-app.publish(data => app.channel('everybody'))
+app.publish((data) => app.channel('everybody'))
 
 // For good measure let's create some tweets
 // So our API doesn't look so empty
-app.service(API_TWEETS).find({}).then((docs) => {
-  if (docs && docs.length < 1) {
-    return createTweets()
-  }
-}).catch((err) => {
-  console.error('ERROR:', err.message)
-})
+app
+  .service(API_TWEETS)
+  .find({})
+  .then((docs) => {
+    if (docs && docs.length < 1) {
+      return createTweets()
+    }
+  })
+  .catch((err) => {
+    console.error('ERROR:', err.message)
+  })
 
 // Start the server
-app.listen(SERVER_PORT).on('listening', () =>
-  console.log(`Server listening on localhost:${SERVER_PORT}`)
-)
+app
+  .listen(SERVER_PORT)
+  .on('listening', () =>
+    console.log(`Server listening on localhost:${SERVER_PORT}`),
+  )

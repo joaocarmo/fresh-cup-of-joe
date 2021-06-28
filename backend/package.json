@@ -1,0 +1,35 @@
+{
+  "name": "fresh-cup-of-joe-backend",
+  "version": "1.0.0",
+  "description": "When you need that fresh cup of joe in the morning",
+  "main": "src/index.js",
+  "private": true,
+  "scripts": {
+    "start:dev": "NODE_ENV=development nodemon src/index.js",
+    "start": "NODE_ENV=production node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joaocarmo/fresh-cup-of-joe.git"
+  },
+  "author": "João Carmo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joaocarmo/fresh-cup-of-joe/issues"
+  },
+  "homepage": "https://github.com/joaocarmo/fresh-cup-of-joe#readme",
+  "dependencies": {
+    "@feathersjs/errors": "^4.5.11",
+    "@feathersjs/express": "^4.5.11",
+    "@feathersjs/feathers": "^4.5.11",
+    "@feathersjs/socketio": "^4.5.11",
+    "cors": "^2.8.5",
+    "faker": "^5.5.3",
+    "feathers-mongoose": "^8.3.3",
+    "mongoose": "^5.12.12"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}

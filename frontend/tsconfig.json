@@ -2,11 +2,10 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "jsx": "react-jsx",
-    "baseUrl": "./frontend",
+    "baseUrl": "./src",
     "paths": {
       "~*": ["./*"]
     }
   },
-  "exclude": ["backend/**/*"],
-  "include": ["frontend/**/*", ".eslintrc.js"]
+  "include": ["src/**/*"]
 }
